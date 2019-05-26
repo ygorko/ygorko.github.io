@@ -1,0 +1,89 @@
+body {
+    background-color: #f3f3f3;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+img.attachment-full {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+._mitem_sniplet {
+    border: solid 1px darkgray;
+    padding: 10px;
+    background-color: #e3e3e3;
+    border-radius: 5px;
+}
+.header {
+    padding: 30px;
+}
+
+.sandbox {
+    height: calc(100% - 55px);
+}
+
+.sandbox table {
+    width: 100%;
+    height: 100%;
+}
+
+.sandbox thead tr td{
+    text-align: center;
+}
+
+.sandbox tbody tr td{
+    padding: 6px;
+    width: 33%;
+    height: 85%;
+}
+
+.sandbox .output {
+    height: 100%;
+}
+
+.sandbox textarea {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+.sandbox button {
+    right: 10px;
+    position: absolute;
+}
+.sandbox .output {
+    vertical-align: baseline;
+}
+
+button {
+    padding: 10px;
+    border-radius: 5px;
+    border: solid 1px darkgray;
+    outline: none;
+    cursor: pointer;
+}
+
+button:active {
+    background-color: lightgray;
+}
+
+table.tbl {
+    border: solid 1px darkgray;
+    border-collapse: collapse;
+    border-spacing: 0;
+    font: normal 13px Arial, sans-serif;
+}
+table.tbl thead th {
+    background-color: #cccccc;
+    border: solid 1px darkgray;
+    color: #333333;
+    padding: 10px;
+    text-align: left;
+}
+table.tbl tbody td {
+    border: solid 1px darkgray;
+    color: #333;
+    padding: 10px;
+}

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%">
+    <head>
+        <meta charset="UTF-8">
+        <title>miTem sandbox</title>
+        <script src="js/mitem.min.js"></script>
+        <script src="js/jquery.js"></script>
+        <script src="js/json5.min.js"></script>
+        <link rel="stylesheet" href="styles/mitem_site.css">
+    </head>
+    <body class="sandbox">
+        <table class="sandbox">
+            <thead>
+            <tr><td>Template</td><td>Data</td><td>Output</td></tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td><textarea class='tmpl'></textarea></td>
+                <td><textarea class='data'></textarea></td>
+                <td><pre class="output"></pre></td>
+            </tr>
+            </tbody>
+        </table>
+        <button id="go">Go</button>
+    <script>
+        $("#go").click(function () {
+            var tmpl = $(".tmpl").val();
+            var data = JSON5.parse($(".data").val());
+            var template = miTem.compile(tmpl);
+            var out = template(data);
+            $(".output").text(out);
+        })
+    </script>
+    </body>
+</html>
