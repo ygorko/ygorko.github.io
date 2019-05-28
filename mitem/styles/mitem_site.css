@@ -87,3 +87,10 @@ table.tbl tbody td {
     color: #333;
     padding: 10px;
 }
+
+.buttons {
+    position: absolute;
+    top: 0;
+    right: 155px;
+    padding: 10px;
+}
