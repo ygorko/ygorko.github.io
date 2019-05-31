@@ -25,11 +25,15 @@
 </ul>
 <h2>Usage</h2>
 <h3>How to use</h3>
-<pre><code class="javascript">    var template = "Hello {{name}}";
-    var tmpl = miTem.compile(template);
-    var data = {name: "world"};
+<pre><code class="javascript">    const mitem = require('./mitem');
 
-    var output = tmpl(data);
+    const template = mitem.compile('{{ foo }}');
+
+    let output = template({ foo: 'bar' });
+    console.log(output);
+
+    output = template({ foo: 'baz' });
+    console.log(output);
 </code></pre>
 
 <h3>Variables</h3>
@@ -63,7 +67,7 @@
     <pre><code class="text"></code></pre>
 </div>
 
-<p>Of course several filters can be applied to same variable </p>
+<p>Of course several filters can be applied to the same variable </p>
 <div class="_mitem_sniplet">
     Template:
     <pre><code class="twig">{{ arr | join(',') | toUpperCase }}</code></pre>
@@ -129,6 +133,23 @@
     </code></pre>
     Data:
     <pre><code class="json">{"condition": true}</code></pre>
+    Output:
+    <pre><code class="text"></code></pre>
+</div>
+<p>It's also possible to use {% else if %} tag</p>
+<div class="_mitem_sniplet">
+    Template:
+    <pre><code class="twig">
+{% if cnd_1 %}
+    cnd_1 true
+{% else if cnd_2 %}
+    cnd_1 false, but cnd_2 true
+{% else %}
+    cnd_1 and cnd_2 false
+{% endif %}
+    </code></pre>
+    Data:
+    <pre><code class="json">{"cnd_1": false, "cnd_2": true}</code></pre>
     Output:
     <pre><code class="text"></code></pre>
 </div>
@@ -216,10 +237,10 @@
 
 <h3>Partials:</h3>
 To use partial we need to register it
-<pre><code class="javascript">let partial = mitem.compile("hello {{who}}");
+<pre><code class="javascript">const partial = mitem.compile("hello {{who}}");
 mitem.registerPartial("hello", partial);</code></pre>
 Now create template with {% partial %} keyword
-<pre><code class="javascript">let template = mitem.compile("" +
+<pre><code class="javascript">const template = mitem.compile("" +
         "{% for item in arr %}" +
         "{% partial hello item %} " +
         "{% endfor %}"
