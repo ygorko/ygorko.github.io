@@ -3,19 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <title>miTem.js - small and fast template engine</title>
-    <script src="js/mitem.min.js"> </script>
+    <script src="js/mitem.1.0.6.min.js"> </script>
+    <script src="js/moment.js"> </script>
     <script src="js/mitem_site.js"> </script>
-    <link rel="stylesheet" href="styles/rainbow.css">
-    <link rel="stylesheet" href="styles/mitem_site.css">
-    <script src="js/highlight.pack.js"></script>
     <script src="js/jquery.js"></script>
+    <script src="js/bootstrap/bootstrap.min.js"> </script>
+    <link rel="stylesheet" href="styles/lightfair.css">
+    <link rel="stylesheet" href="styles/mitem_site.css">
+    <link rel="stylesheet" href="styles/bootstrap/bootstrap.min.css">
+    
+    <script src="js/highlight.pack.js"></script>
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
 </head>
 <body>
 <a href="https://github.com/ygorko/mitem"><img width="149" height="149" src="https://github.blog/wp-content/uploads/2008/12/forkme_right_darkblue_121621.png?resize=149%2C149" class="attachment-full size-full" alt="Fork me on GitHub" data-recalc-dims="1"></a>
 <h1 class="header">miTem - lightweight and fast javascript template engine with <a href="https://twig.symfony.com">twig</a> like syntax</h1>
-<h2>Features</h2>
+<div class="container-fluid">
+<h3>Features</h3>
 <ul>
     <li>less than 3 KB of minified code</li>
     <li>fast</li>
@@ -23,12 +28,11 @@
     <li>filters for variables (builtin and custom)</li>
     <li>support partials</li>
 </ul>
-<h2>Usage</h2>
-<h3>How to use</h3>
-<pre><code class="javascript">    const mitem = require('./mitem');
+<h3>Usage</h3>
 
-    const template = mitem.compile('{{ foo }}');
+<pre><code class="javascript">    const miTem = require('./mitem');
 
+    const template = miTem.compile('{{ foo }}');
     let output = template({ foo: 'bar' });
     console.log(output);
 
@@ -82,17 +86,43 @@
     <pre><code class="text"></code></pre>
 </div>
 
-<h4>How to add custom filter:</h4>
-<p>To use custom filter you need register it first. </p>
-<pre><code class="javascript">miTem.filters["prefix"] = function(pref) {
+<h5>How to add custom filter:</h5>
+
+
+<p>To use partial we need to register it</p>
+<div class="_mitem_sniplet">
+    Javascript code:
+    <pre><code class="javascript">miTem.filters["prefix"] = function(pref) {
     return pref + "_" + this;
 }</code></pre>
-<pre><code class="twig">{{str | prefix('asd')}}</code></pre>
-<pre><code class="json">{str: "qwerty"}</code></pre>
-<pre><code class="shell">asd_qwerty</code></pre>
+    Template:
+    <pre><code class="twig">{{str | prefix('asd')}}</code></pre>
+    Data:
+    <pre><code class="json">{"str": "qwerty"}</code></pre>
+    Output:
+    <pre><code class="text"></code></pre>
+</div>
 <p>'this' will be pointed to current value in filter function</p>
 
-<h4>Builtin filters:</h4>
+<h5>Some additional tricks with custom filters:</h5>
+<p>Let's try format date using <a href="https://momentjs.com/">moment.js</a></p>
+<div class="_mitem_sniplet">
+    Javascript code:
+    <pre><code class="javascript">const moment = require('moment');
+miTem.filters["moment_from_string"] = function(inputFormat) {
+    return moment(this, inputFormat);
+}</code></pre>
+    Template:
+    <pre><code class="twig">Date: {{ date_str | moment_from_string('YYYY-MM-DD') | subtract(6, 'days') | format('MMM Do YY, dddd') }}</code></pre>
+    Data:
+    <pre><code class="json">{"date_str": "2019-03-18"}</code></pre>
+    Output:
+    <pre><code class="text"></code></pre>
+</div>
+<p>What happened here: first we've created custom filter 'moment_from_str' that just parse string in specific
+    format and return 'moment' object. Than we can use any moment methods as additional filters.</p>
+
+<h5>Builtin filters:</h5>
 <table class="tbl">
     <thead valign="bottom">
         <tr>
@@ -158,7 +188,7 @@
 <div class="_mitem_sniplet">
     Template:
     <pre><code class="twig">
-        {% for item in arr %}{{item.foo}} {% endfor %}
+        {% for item in arr %} {{item.foo}} {% endfor %}
     </code></pre>
     Data:
     <pre><code class="json">{
@@ -236,36 +266,77 @@
 </table>
 
 <h3>Partials:</h3>
-To use partial we need to register it
-<pre><code class="javascript">const partial = mitem.compile("hello {{who}}");
-mitem.registerPartial("hello", partial);</code></pre>
-Now create template with {% partial %} keyword
-<pre><code class="javascript">const template = mitem.compile("" +
-        "{% for item in arr %}" +
-        "{% partial hello item %} " +
-        "{% endfor %}"
-);</code></pre>
-<pre><code class="json">{
-    "arr":[
-        {"who": "test"},
-        {"who": "test2"}
-    ]
-}</code></pre>
-<pre><code class="shell">hello test hello test2 </code></pre>
-<h3>Sorce code:</h3>
+<p>To use partial we need to register it</p>
+<div class="_mitem_sniplet">
+    Javascript code:
+    <pre><code class="javascript">const partial = miTem.compile("hello {{who}}");
+miTem.registerPartial("hello", partial);</code></pre>
+    Template:
+    <pre><code class="twig">{% for item in arr %} {% partial hello item %} {% endfor %}</code></pre>
+    Data:
+    <pre><code class="json">{
+        "arr":[
+            {"who": "test"},
+            {"who": "test2"}
+        ]
+    }</code></pre>
+    Output:
+<pre><code class="text"></code></pre>
+</div>
+
+<h3>Links</h3>
+<h5>Sorce code:</h5>
 <a href="https://github.com/ygorko/miTem">https://github.com/ygorko/miTem</a>
-<h3>Author:</h3>
+<h5>Author:</h5>
 Ihor Yermolaiev aka <a href="https://github.com/ygorko">ygorko</a>
-<h3>Issues:</h3>
+<h5>Issues:</h5>
 <a href="https://github.com/ygorko/miTem/issues">https://github.com/ygorko/miTem/issues</a>
-<h3>License:</h3>
-<p>MIT license</p>
+<h5>License:</h5>
+<p><a href="https://opensource.org/licenses/MIT">MIT</a> license</p>
+
+</div>
+
 
 <div class="buttons">
     <a class="github-button" href="https://github.com/ygorko/mitem" data-icon="octicon-star" data-size="large" aria-label="Star ygorko/mitem on GitHub">Star</a>
     <a class="github-button" href="https://github.com/ygorko/mitem/archive/master.zip" data-icon="octicon-cloud-download" data-size="large" aria-label="Download ygorko/mitem on GitHub">Download</a>
     <a class="github-button" href="https://github.com/ygorko/mitem/subscription" data-icon="octicon-eye" data-size="large" aria-label="Watch ygorko/mitem on GitHub">Watch</a>
     <a class="github-button" href="https://github.com/ygorko/mitem/issues" data-icon="octicon-issue-opened" data-size="large" aria-label="Issue ygorko/mitem on GitHub">Issue</a>
+</div>
+
+<div class="modal " id="sandbox_modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm js-col">
+                            Javascript:
+                            <textarea id="sandbox-js" rows="7"></textarea>
+                        </div>
+                        <div class="col-sm">
+                            Template:
+                            <textarea id="sandbox-tmpl" rows="7"></textarea>
+                        </div>
+                        <div class="col-sm">
+                            Data:
+                            <textarea id="sandbox-data" rows="7"></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm">
+                            Output:
+                            <div class="sandbox-output card">out</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Go</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
